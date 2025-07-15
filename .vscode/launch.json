@@ -1,0 +1,80 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run Current Test",
+            "request": "launch",
+            "mainClass": "",
+            "projectName": "mortgage_loan",
+            "args": "",
+            "vmArgs": [
+                "-Xmx512m",
+                "-Dspring.profiles.active=test"
+            ],
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "test"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Debug Current Test",
+            "request": "launch",
+            "mainClass": "",
+            "projectName": "mortgage_loan",
+            "args": "",
+            "vmArgs": [
+                "-Xmx512m",
+                "-Dspring.profiles.active=test"
+            ],
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "test"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Run All Tests",
+            "request": "launch",
+            "mainClass": "",
+            "projectName": "mortgage_loan",
+            "args": "",
+            "vmArgs": [
+                "-Xmx512m",
+                "-Dspring.profiles.active=test"
+            ],
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "test"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Run Unit Tests",
+            "request": "launch",
+            "mainClass": "",
+            "projectName": "mortgage_loan",
+            "args": "",
+            "vmArgs": [
+                "-Xmx512m",
+                "-Dspring.profiles.active=test"
+            ],
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "test"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Run Integration Tests",
+            "request": "launch",
+            "mainClass": "",
+            "projectName": "mortgage_loan",
+            "args": "",
+            "vmArgs": [
+                "-Xmx512m",
+                "-Dspring.profiles.active=test"
+            ],
+            "env": {
+                "SPRING_PROFILES_ACTIVE": "test"
+            }
+        }
+    ]
+} 

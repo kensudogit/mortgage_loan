@@ -1,0 +1,125 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.mortgage'
+version = '1.0.0'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Framework
+    implementation 'org.springframework:spring-webmvc:5.3.30'
+    implementation 'org.springframework:spring-jdbc:5.3.30'
+    implementation 'org.springframework:spring-test:5.3.30'
+    
+    // Struts2
+    implementation 'org.apache.struts:struts2-core:2.5.30'
+    implementation 'org.apache.struts:struts2-spring-plugin:2.5.30'
+    implementation 'org.apache.struts:struts2-json-plugin:2.5.30'
+    
+    // MyBatis
+    implementation 'org.mybatis:mybatis:3.5.13'
+    implementation 'org.mybatis:mybatis-spring:2.1.1'
+    
+    // MySQL
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    
+    // Servlet API
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+    providedCompile 'javax.servlet.jsp:javax.servlet.jsp-api:2.2'
+    
+    // JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    
+    // Logging
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'ch.qos.logback:logback-classic:1.2.12'
+    
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.3.1'
+    testImplementation 'org.springframework:spring-test:5.3.30'
+    testImplementation 'org.testcontainers:mysql:1.19.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
+    
+    // Development tools
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.18'
+}
+
+test {
+    useJUnit()
+    
+    // テスト実行時のログ出力
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat = 'full'
+    }
+    
+    // テスト実行時のシステムプロパティ
+    systemProperty 'spring.profiles.active', 'test'
+    
+    // テスト実行時のJVMオプション
+    jvmArgs '-Xmx512m'
+    
+    // テスト実行時のタイムアウト
+    timeout = Duration.ofMinutes(5)
+}
+
+// テストタスクの設定
+tasks.withType(Test) {
+    // テスト実行時の出力を詳細に
+    testLogging {
+        showStandardStreams = true
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
+}
+
+// テスト実行用のカスタムタスク
+task runUnitTests(type: Test) {
+    description = 'Run unit tests only'
+    group = 'verification'
+    
+    include '**/*Test.class'
+    exclude '**/*IntegrationTest.class'
+}
+
+task runIntegrationTests(type: Test) {
+    description = 'Run integration tests only'
+    group = 'verification'
+    
+    include '**/*IntegrationTest.class'
+}
+
+task runAllTests(type: Test) {
+    description = 'Run all tests (unit + integration)'
+    group = 'verification'
+    
+    dependsOn runUnitTests, runIntegrationTests
+}
+
+// IDE用の設定
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main")
+        testOutputDir = file("$buildDir/classes/test")
+    }
+}
+
+// Eclipse用の設定
+eclipse {
+    classpath {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+} 
