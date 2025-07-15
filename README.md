@@ -1,179 +1,207 @@
 # 住宅ローンシステム
 
-## 概要
-
-住宅ローンに関する業務全般（見積もりの作成、申し込み手続き、審査プロセス、融資実行から返済管理まで）を一元的に支援するシステムです。
+Java 8 + Struts2 + Spring + MyBatis + MySQL + React + TypeScriptを使用した包括的な住宅ローン管理システムです。
 
 ## 技術スタック
 
-- **言語**: Java 8
-- **フレームワーク**: Struts 2.5.30
-- **DIコンテナ**: Spring Framework 5.3.20
-- **ORM**: MyBatis 3.5.9
-- **データベース**: MySQL 8.0.28
-- **ビルドツール**: Maven 3.8.1
-- **Webサーバー**: Apache Tomcat 9.0
+### バックエンド
+- **Java 8**: メインのプログラミング言語
+- **Struts2**: Webフレームワーク
+- **Spring Framework**: DIコンテナ、トランザクション管理
+- **MyBatis**: ORMフレームワーク
+- **MySQL**: データベース
+- **Maven**: ビルドツール
 
-## 機能一覧
+### フロントエンド
+- **React 18**: UIライブラリ
+- **TypeScript**: 型安全なJavaScript
+- **React Router**: クライアントサイドルーティング
+- **Axios**: HTTP通信ライブラリ
+- **CSS3**: モダンなスタイリング
 
-### 1. ローン見積もり機能
-- 複数のローン商品から選択
-- 融資額・期間・金利による見積もり計算
-- 月次返済額・総返済額・総利息の表示
-- 返済シミュレーション
+## 主な機能
 
-### 2. ローン申し込み機能
-- 顧客情報の入力
-- 物件情報の登録
-- 収入情報の入力
-- 銀行口座情報の登録
-- 自動審査機能
+### ローン商品管理
+- 新商品条件設定
+- 金利設定
+- 返済方法設定
+- 商品の有効/無効管理
 
-### 3. 審査管理機能
-- 自動審査（年収・物件価格による判定）
-- 審査状況の管理
-- 承認・却下の処理
+### 見積もり機能
+- リアルタイム見積もり計算
+- 複数の返済プラン比較
+- 金利シミュレーション
+- 月次返済額計算
 
-### 4. 商品管理機能
-- 固定金利・変動金利・ミックスプランの対応
-- 商品条件の設定
-- 金利の管理
+### 申し込み機能
+- オンライン申し込み
+- 自動審査システム
+- 申し込み状況追跡
+- 審査結果通知
 
-## システム構成
+### 管理機能
+- 申し込み一覧表示
+- 審査状況管理
+- 顧客情報管理
+- 統計レポート
+
+## プロジェクト構造
 
 ```
-src/
-├── main/
-│   ├── java/
-│   │   └── com/mortgage/
-│   │       ├── action/          # Struts2 Action
-│   │       ├── model/           # エンティティクラス
-│   │       ├── service/         # ビジネスロジック
-│   │       └── dao/             # データアクセス層
-│   ├── resources/
-│   │   ├── mybatis/            # MyBatisマッパー
-│   │   ├── sql/                # SQLスクリプト
-│   │   ├── applicationContext.xml
-│   │   ├── struts.xml
-│   │   └── database.properties
-│   └── webapp/
-│       ├── WEB-INF/
-│       │   ├── jsp/            # JSPファイル
-│       │   └── web.xml
-│       └── index.jsp
-└── test/
-    └── java/
-        └── com/mortgage/
-            └── service/         # 単体テスト
+mortgage_loan/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/mortgage/
+│   │   │       ├── action/
+│   │   │       ├── model/
+│   │   │       ├── service/
+│   │   │       └── dao/
+│   │   ├── resources/
+│   │   │   ├── mybatis/
+│   │   │   └── applicationContext.xml
+│   │   └── webapp/
+│   │       ├── WEB-INF/
+│   │       │   ├── web.xml
+│   │       │   └── struts.xml
+│   │       └── frontend/
+│   │           └── build/
+│   └── test/
+│       └── java/
+│           └── com/mortgage/
+│               └── service/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── types/
+│   │   └── App.tsx
+│   ├── package.json
+│   └── tsconfig.json
+├── pom.xml
+└── README.md
 ```
 
 ## セットアップ手順
 
-### 1. 前提条件
+### 前提条件
 - Java 8以上
 - Maven 3.6以上
-- MySQL 8.0以上
-- Apache Tomcat 9.0以上
+- MySQL 5.7以上
+- Node.js 16以上
+- npm または yarn
 
-### 2. データベース設定
+### 1. データベース設定
 
-1. MySQLにログイン
-```bash
-mysql -u root -p
-```
-
-2. データベースとユーザーを作成
 ```sql
+-- MySQLにログイン
+mysql -u root -p
+
+-- データベース作成
 CREATE DATABASE mortgage_loan CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'mortgage_user'@'localhost' IDENTIFIED BY 'mortgage_pass';
+
+-- ユーザー作成
+CREATE USER 'mortgage_user'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON mortgage_loan.* TO 'mortgage_user'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-3. 初期データを投入
+### 2. バックエンド設定
+
 ```bash
-mysql -u mortgage_user -p mortgage_loan < src/main/resources/sql/init.sql
+# プロジェクトディレクトリに移動
+cd devlop/mortgage_loan
+
+# データベース初期化
+mysql -u mortgage_user -p mortgage_loan < src/main/resources/init.sql
+
+# Mavenでビルド
+mvn clean install
+
+# アプリケーション起動
+mvn tomcat7:run
 ```
 
-### 3. アプリケーション設定
+### 3. フロントエンド設定
 
-1. データベース接続設定を編集
 ```bash
-# src/main/resources/database.properties
-jdbc.url=jdbc:mysql://localhost:3306/mortgage_loan?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Tokyo
-jdbc.username=mortgage_user
-jdbc.password=mortgage_pass
-```
+# フロントエンドディレクトリに移動
+cd frontend
 
-### 4. ビルドとデプロイ
+# 依存関係インストール
+npm install
 
-1. プロジェクトをビルド
-```bash
-mvn clean package
-```
+# 開発サーバー起動
+npm start
 
-2. WARファイルをTomcatにデプロイ
-```bash
-cp target/mortgage-loan-system-1.0.0.war $TOMCAT_HOME/webapps/mortgage-loan.war
-```
-
-3. Tomcatを起動
-```bash
-$TOMCAT_HOME/bin/startup.sh
-```
-
-4. アプリケーションにアクセス
-```
-http://localhost:8080/mortgage-loan/
+# 本番ビルド
+npm run build
 ```
 
 ## 使用方法
 
-### 1. ローン見積もり
-1. トップページから「ローン見積もり」を選択
+### 1. 見積もり計算
+1. トップページから「見積もりを始める」をクリック
 2. ローン商品を選択
 3. 融資希望額と期間を入力
-4. 「見積もり計算」ボタンをクリック
-5. 計算結果を確認
+4. 「見積もり計算」をクリック
+5. 結果を確認
 
 ### 2. ローン申し込み
-1. 見積もり結果画面から「この条件で申し込む」を選択
-2. 顧客情報を入力
+1. 見積もり結果から「この条件で申し込む」をクリック
+2. お客様情報を入力
 3. 物件情報を入力
-4. 収入情報を入力
-5. 銀行口座情報を入力
-6. 「申し込みを完了する」ボタンをクリック
+4. 収入・職業情報を入力
+5. 口座情報を入力
+6. 「申し込みを確定する」をクリック
 
-## テスト実行
-
-### 単体テスト
-```bash
-mvn test
-```
-
-### 統合テスト
-```bash
-mvn verify
-```
+### 3. 申し込み状況確認
+1. 申し込み完了画面で審査状況を確認
+2. メールで審査結果を受信
+3. 承認の場合は契約手続きへ
 
 ## 開発ガイドライン
 
-### 1. コーディング規約
-- Javaコーディング規約に準拠
-- クラス名はPascalCase
-- メソッド名・変数名はcamelCase
-- 定数はUPPER_SNAKE_CASE
+### コーディング規約
+- Java: Google Java Style Guide準拠
+- TypeScript: ESLint + Prettier使用
+- コミットメッセージ: Conventional Commits準拠
 
-### 2. データベース設計
-- テーブル名はsnake_case
-- 主キーは`id`または`{table_name}_id`
-- 外部キーは`{referenced_table}_id`
-- 作成日時・更新日時は必須
+### テスト
+```bash
+# バックエンドテスト
+mvn test
 
-### 3. セキュリティ
-- SQLインジェクション対策（MyBatis使用）
-- XSS対策（Struts2のエスケープ機能使用）
-- CSRF対策（Struts2のトークン機能使用）
+# フロントエンドテスト
+npm test
+```
+
+### デプロイ
+```bash
+# 本番ビルド
+mvn clean package
+npm run build
+
+# WARファイルをTomcatにデプロイ
+cp target/mortgage-loan.war $TOMCAT_HOME/webapps/
+```
+
+## API仕様
+
+### ローン商品API
+- `GET /api/loan/products` - 商品一覧取得
+- `GET /api/loan/products/{id}` - 商品詳細取得
+
+### 見積もりAPI
+- `POST /api/loan/estimate/calculate` - 見積もり計算
+- `GET /api/loan/estimate/{id}` - 見積もり詳細取得
+
+### 申し込みAPI
+- `POST /api/loan/application/submit` - 申し込み送信
+- `GET /api/loan/application/{id}` - 申し込み詳細取得
+- `GET /api/loan/application/customer/{id}` - 顧客別申し込み一覧
 
 ## トラブルシューティング
 
@@ -181,20 +209,35 @@ mvn verify
 
 1. **データベース接続エラー**
    - MySQLサービスが起動しているか確認
-   - 接続情報（URL、ユーザー名、パスワード）を確認
+   - 接続情報が正しいか確認
 
-2. **コンパイルエラー**
-   - Java 8がインストールされているか確認
-   - Mavenの依存関係が正しく解決されているか確認
+2. **フロントエンドビルドエラー**
+   - Node.jsバージョンを確認
+   - 依存関係を再インストール
 
-3. **デプロイエラー**
-   - Tomcatのバージョンを確認（9.0以上推奨）
-   - WARファイルが正しく配置されているか確認
+3. **API通信エラー**
+   - バックエンドサーバーが起動しているか確認
+   - CORS設定を確認
+
+### ログ確認
+```bash
+# アプリケーションログ
+tail -f logs/mortgage-loan.log
+
+# データベースログ
+tail -f /var/log/mysql/error.log
+```
 
 ## ライセンス
 
-このプロジェクトは社内利用を目的としています。
+このプロジェクトはMITライセンスの下で公開されています。
 
-## お問い合わせ
+## 貢献
 
-システムに関するお問い合わせは、開発チームまでご連絡ください。 "# mortgage_loan" 
+プルリクエストやイシューの報告を歓迎します。貢献する前に、コーディング規約を確認してください。
+
+## サポート
+
+技術的な質問や問題がある場合は、以下の方法でお問い合わせください：
+- イシュー: GitHub Issues
+- メール: support@mortgage-loan.com 

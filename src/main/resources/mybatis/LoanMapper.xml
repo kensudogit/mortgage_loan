@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LoanMapper">
+
+    <!-- ローン商品マッパー -->
+    <resultMap id="LoanProductResultMap" type="com.mortgage.model.LoanProduct">
+        <id property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="productType" column="product_type"/>
+        <result property="minInterestRate" column="min_interest_rate"/>
+        <result property="maxInterestRate" column="max_interest_rate"/>
+        <result property="currentInterestRate" column="current_interest_rate"/>
+        <result property="minLoanAmount" column="min_loan_amount"/>
+        <result property="maxLoanAmount" column="max_loan_amount"/>
+        <result property="minLoanTerm" column="min_loan_term"/>
+        <result property="maxLoanTerm" column="max_loan_term"/>
+        <result property="repaymentMethod" column="repayment_method"/>
+        <result property="description" column="description"/>
+        <result property="isActive" column="is_active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 見積もりマッパー -->
+    <resultMap id="LoanEstimateResultMap" type="com.mortgage.model.LoanEstimate">
+        <id property="estimateId" column="estimate_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="loanAmount" column="loan_amount"/>
+        <result property="loanTerm" column="loan_term"/>
+        <result property="interestRate" column="interest_rate"/>
+        <result property="monthlyPayment" column="monthly_payment"/>
+        <result property="totalPayment" column="total_payment"/>
+        <result property="totalInterest" column="total_interest"/>
+        <result property="repaymentMethod" column="repayment_method"/>
+        <result property="estimatedAt" column="estimated_at"/>
+        <result property="customerId" column="customer_id"/>
+    </resultMap>
+
+    <!-- 申し込みマッパー -->
+    <resultMap id="LoanApplicationResultMap" type="com.mortgage.model.LoanApplication">
+        <id property="applicationId" column="application_id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="customerEmail" column="customer_email"/>
+        <result property="customerPhone" column="customer_phone"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="loanAmount" column="loan_amount"/>
+        <result property="loanTerm" column="loan_term"/>
+        <result property="interestRate" column="interest_rate"/>
+        <result property="monthlyPayment" column="monthly_payment"/>
+        <result property="applicationStatus" column="application_status"/>
+        <result property="propertyAddress" column="property_address"/>
+        <result property="propertyType" column="property_type"/>
+        <result property="propertyValue" column="property_value"/>
+        <result property="employmentType" column="employment_type"/>
+        <result property="annualIncome" column="annual_income"/>
+        <result property="bankAccountNumber" column="bank_account_number"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="branchName" column="branch_name"/>
+        <result property="applicationDate" column="application_date"/>
+        <result property="approvalDate" column="approval_date"/>
+        <result property="approvedBy" column="approved_by"/>
+        <result property="rejectionReason" column="rejection_reason"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 全てのローン商品を取得 -->
+    <select id="getAllLoanProducts" resultMap="LoanProductResultMap">
+        SELECT * FROM loan_products 
+        WHERE is_active = 1 
+        ORDER BY product_id
+    </select>
+
+    <!-- 商品IDでローン商品を取得 -->
+    <select id="getLoanProductById" parameterType="string" resultMap="LoanProductResultMap">
+        SELECT * FROM loan_products 
+        WHERE product_id = #{productId} AND is_active = 1
+    </select>
+
+    <!-- 見積もりを保存 -->
+    <insert id="saveEstimate" parameterType="com.mortgage.model.LoanEstimate">
+        INSERT INTO loan_estimates (
+            estimate_id, product_id, product_name, loan_amount, loan_term,
+            interest_rate, monthly_payment, total_payment, total_interest,
+            repayment_method, estimated_at, customer_id
+        ) VALUES (
+            #{estimateId}, #{productId}, #{productName}, #{loanAmount}, #{loanTerm},
+            #{interestRate}, #{monthlyPayment}, #{totalPayment}, #{totalInterest},
+            #{repaymentMethod}, #{estimatedAt}, #{customerId}
+        )
+    </insert>
+
+    <!-- 見積もりIDで見積もりを取得 -->
+    <select id="getEstimateById" parameterType="string" resultMap="LoanEstimateResultMap">
+        SELECT * FROM loan_estimates 
+        WHERE estimate_id = #{estimateId}
+    </select>
+
+    <!-- 申し込みを保存 -->
+    <insert id="saveApplication" parameterType="com.mortgage.model.LoanApplication">
+        INSERT INTO loan_applications (
+            application_id, customer_id, customer_name, customer_email, customer_phone,
+            product_id, product_name, loan_amount, loan_term, interest_rate, monthly_payment,
+            application_status, property_address, property_type, property_value,
+            employment_type, annual_income, bank_account_number, bank_name, branch_name,
+            application_date, approval_date, approved_by, rejection_reason,
+            created_at, updated_at
+        ) VALUES (
+            #{applicationId}, #{customerId}, #{customerName}, #{customerEmail}, #{customerPhone},
+            #{productId}, #{productName}, #{loanAmount}, #{loanTerm}, #{interestRate}, #{monthlyPayment},
+            #{applicationStatus}, #{propertyAddress}, #{propertyType}, #{propertyValue},
+            #{employmentType}, #{annualIncome}, #{bankAccountNumber}, #{bankName}, #{branchName},
+            #{applicationDate}, #{approvalDate}, #{approvedBy}, #{rejectionReason},
+            #{createdAt}, #{updatedAt}
+        )
+    </insert>
+
+    <!-- 申し込みを更新 -->
+    <update id="updateApplication" parameterType="com.mortgage.model.LoanApplication">
+        UPDATE loan_applications SET
+            application_status = #{applicationStatus},
+            approval_date = #{approvalDate},
+            approved_by = #{approvedBy},
+            rejection_reason = #{rejectionReason},
+            updated_at = #{updatedAt}
+        WHERE application_id = #{applicationId}
+    </update>
+
+    <!-- 申し込みIDで申し込みを取得 -->
+    <select id="getApplicationById" parameterType="string" resultMap="LoanApplicationResultMap">
+        SELECT * FROM loan_applications 
+        WHERE application_id = #{applicationId}
+    </select>
+
+    <!-- 顧客IDで申し込み履歴を取得 -->
+    <select id="getApplicationsByCustomerId" parameterType="string" resultMap="LoanApplicationResultMap">
+        SELECT * FROM loan_applications 
+        WHERE customer_id = #{customerId}
+        ORDER BY application_date DESC
+    </select>
+
+    <!-- 申し込み状況で申し込み一覧を取得 -->
+    <select id="getApplicationsByStatus" parameterType="string" resultMap="LoanApplicationResultMap">
+        SELECT * FROM loan_applications 
+        WHERE application_status = #{status}
+        ORDER BY application_date DESC
+    </select>
+
+</mapper> 

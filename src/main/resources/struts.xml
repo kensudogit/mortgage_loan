@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <!-- 定数設定 -->
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.objectFactory" value="spring"/>
+    <constant name="struts.action.extension" value="action,,"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+    <constant name="struts.multipart.maxSize" value="2097152"/>
+
+    <!-- パッケージ設定 -->
+    <package name="default" namespace="/" extends="struts-default">
+        <!-- グローバルリザルト -->
+        <global-results>
+            <result name="error">/WEB-INF/jsp/error.jsp</result>
+        </global-results>
+
+        <!-- グローバル例外マッピング -->
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+        </global-exception-mappings>
+    </package>
+
+    <!-- ローン関連パッケージ -->
+    <package name="loan" namespace="/loan" extends="struts-default">
+        <!-- 見積もり画面 -->
+        <action name="estimate" class="com.mortgage.action.LoanAction" method="estimate">
+            <result name="success">/WEB-INF/jsp/loan/estimate.jsp</result>
+            <result name="error">/WEB-INF/jsp/error.jsp</result>
+        </action>
+
+        <!-- 見積もり計算 -->
+        <action name="calculate" class="com.mortgage.action.LoanAction" method="calculate">
+            <result name="success">/WEB-INF/jsp/loan/estimate_result.jsp</result>
+            <result name="error">/WEB-INF/jsp/loan/estimate.jsp</result>
+        </action>
+
+        <!-- 申し込み画面 -->
+        <action name="apply" class="com.mortgage.action.LoanAction" method="apply">
+            <result name="success">/WEB-INF/jsp/loan/application.jsp</result>
+            <result name="error">/WEB-INF/jsp/error.jsp</result>
+        </action>
+
+        <!-- 申し込み処理 -->
+        <action name="submit" class="com.mortgage.action.LoanAction" method="submit">
+            <result name="success">/WEB-INF/jsp/loan/application_complete.jsp</result>
+            <result name="error">/WEB-INF/jsp/loan/application.jsp</result>
+        </action>
+    </package>
+
+</struts> 
