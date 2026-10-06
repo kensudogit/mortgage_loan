@@ -1,5 +1,9 @@
 # 住宅ローンシステム
 
+> **FinTech / Lending Platform** — End-to-end mortgage workflow covering loan products, repayment simulation, applications, automated screening, customer management, and reporting.
+>
+> **Stack:** Java 8 · Struts2 · Spring · MyBatis · MySQL · React 18 · TypeScript · Gradle
+
 Java 8 + Struts2 + Spring + MyBatis + MySQL + React + TypeScriptを使用した包括的な住宅ローン管理システムです。
 
 ## 技術スタック
